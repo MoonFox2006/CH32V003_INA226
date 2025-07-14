@@ -188,7 +188,8 @@ twi_err TWI_Start(uint8_t addr, bool receiver) {
     timeout = TWI_WAIT;
     while (! I2C_CheckEvent(I2C1, receiver ? I2C_EVENT_MASTER_RECEIVER_MODE_SELECTED : I2C_EVENT_MASTER_TRANSMITTER_MODE_SELECTED)) {
         if (! timeout--) {
-            I2C_GenerateSTART(I2C1, DISABLE);
+//            I2C_GenerateSTART(I2C1, DISABLE);
+            I2C_GenerateSTOP(I2C1, ENABLE);
             return TWI_NACK;
         }
     }
@@ -208,7 +209,8 @@ twi_err TWI_Start(uint8_t addr, bool receiver) {
     I2C1->DATAR = (addr << 1) | receiver;
 
     if (! TWI_Wait(receiver ? I2C_MASTER_RECEIVER_MODE_SELECTED : I2C_MASTER_TRANSMITTER_MODE_SELECTED)) {
-        I2C1->CTLR1 &= ~I2C_CTLR1_START;
+//        I2C1->CTLR1 &= ~I2C_CTLR1_START;
+        I2C1->CTLR1 |= I2C_CTLR1_STOP;
         return TWI_NACK;
     }
 #endif
