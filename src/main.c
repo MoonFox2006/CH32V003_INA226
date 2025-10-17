@@ -79,9 +79,10 @@ int main(void) {
             screen_printstr_x2(str, 0, 16, 1);
             normalizeU32(str, sizeof(str), microWatts, "W");
             screen_printstr_x2(str, 0, 32, 1);
-            normalizeU32(str, sizeof(str), (uint32_t)((totalMicroAmps * 3600000000ULL / 1055232) / totalTime), "A/h");
+            normalizeU32(str, sizeof(str), (uint32_t)(((totalMicroAmps * 1000000ULL / 1055232) / totalTime) / 3600), "A/h"); // uA/s * 1/3600 = uA/h
             screen_printstr_x2(str, 0, 48, 1);
             ssd1306_flush(true);
         }
     }
 }
+
